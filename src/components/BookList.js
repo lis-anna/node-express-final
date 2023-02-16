@@ -1,9 +1,45 @@
 import { useEffect, useState } from 'react';
+import {
+  Table,
+  Header,
+  HeaderRow,
+  HeaderCell,
+  Body,
+  Row,
+  Cell,
+} from '@table-library/react-table-library/table';
+import { useTheme } from '@table-library/react-table-library/theme';
+const THEME = {
+  Table: `
+    --data-table-library_grid-template-columns:  250px 150px 25% 25% 50%;
+  `,
+  BaseCell: `
+    &:nth-of-type(1) {
+      left: 0px;
+    }
+
+    &:nth-of-type(2) {
+      left: 250px;
+    }
+  `,
+};
 
 const BookList = () => {
   const userToken = JSON.parse(localStorage.getItem('token'));
   let message = {};
   const [booksData, setBooksData] = useState([]);
+  const [search, setSearch] = useState('');
+  const [filters, setFilters] = useState([]);
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
+
+  /*const handleFilter = (filter) => {
+    filters.includes(filter)
+      ? setFilters(filters.filter((value) => value !== filter))
+      : setFilters(filters.concat(filter));
+  };*/
 
   useEffect(() => {
     const buildbooksTable = async function (token, message) {
@@ -39,41 +75,60 @@ const BookList = () => {
     buildbooksTable(userToken, message);
   }, []);
   // console.log(booksData, 'array');
+  const data = {
+    nodes: booksData.filter((item) =>
+      item.title.toLowerCase().includes(search.toLowerCase())
+    ),
+  };
+  const theme = useTheme(THEME);
   return (
-    <table>
-      <thead>
-        <tr>
-          <th>Author</th>
-          <th>Title</th>
-          <th>ISBN</th>
-          <th>Status</th>
-          <th>Note</th>
-        </tr>
-      </thead>
-      <tbody>
-        {booksData.map((item) => {
-          return (
-            <tr key={item._id}>
-              <td>{item.author}</td>
-              <td>{item.title}</td>
-              <td>{item.isbn}</td>
-              <td>{item.status}</td>
-              <td>{item.note}</td>
-              <td>
-                <button type='button' class='editButton'>
-                  edit
-                </button>
-              </td>
-              <td>
-                <button type='button' class='deleteButton'>
-                  delete
-                </button>
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+    <>
+      <label htmlFor='search'>
+        Search book by title:
+        <input id='search' type='text' onChange={handleSearch} />
+      </label>
+
+      <Table data={data} theme={theme}>
+        {(tableList) => (
+          <>
+            <Header>
+              <HeaderRow>
+                <HeaderCell>Author</HeaderCell>
+                <HeaderCell>Title</HeaderCell>
+                <HeaderCell>ISBN</HeaderCell>
+                <HeaderCell>Status</HeaderCell>
+                <HeaderCell>Note</HeaderCell>
+                <HeaderCell>Action</HeaderCell>
+                <HeaderCell></HeaderCell>
+              </HeaderRow>
+            </Header>
+            <Body>
+              {tableList.map((item) => {
+                return (
+                  <Row key={item._id} item={item}>
+                    <Cell>{item.author}</Cell>
+                    <Cell>{item.title}</Cell>
+                    <Cell>{item.isbn}</Cell>
+                    <Cell>{item.status}</Cell>
+                    <Cell>{item.note}</Cell>
+                    <Cell>
+                      <button type='button' className='editButton'>
+                        edit
+                      </button>
+                    </Cell>
+                    <Cell>
+                      <button type='button' className='deleteButton'>
+                        delete
+                      </button>
+                    </Cell>
+                  </Row>
+                );
+              })}
+            </Body>
+          </>
+        )}
+      </Table>
+    </>
   );
 };
 
