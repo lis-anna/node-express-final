@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import DropListButton from './Dropdown/DropListButton';
 import {
   Table,
   Header,
@@ -9,27 +10,34 @@ import {
   Cell,
 } from '@table-library/react-table-library/table';
 import { useTheme } from '@table-library/react-table-library/theme';
-const THEME = {
-  Table: `
-    --data-table-library_grid-template-columns:  250px 150px 25% 25% 50%;
+import { getTheme } from '@table-library/react-table-library/baseline';
+import { Input } from '@chakra-ui/react';
+
+/*const THEME = {
+  HeaderRow: `
+    font-size: 14px;
+
+    background-color: #eaf5fd;
   `,
-  BaseCell: `
-    &:nth-of-type(1) {
-      left: 0px;
+  Row: `
+    font-size: 14px;
+
+    &:nth-child(odd) {
+      background-color: #d2e9fb;
     }
 
-    &:nth-of-type(2) {
-      left: 250px;
+    &:nth-child(even) {
+      background-color: #eaf5fd;
     }
   `,
-};
+};*/
 
 const BookList = () => {
   const userToken = JSON.parse(localStorage.getItem('token'));
   let message = {};
   const [booksData, setBooksData] = useState([]);
   const [search, setSearch] = useState('');
-  const [filters, setFilters] = useState([]);
+  // const [filters, setFilters] = useState([]);
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
@@ -75,17 +83,23 @@ const BookList = () => {
     buildbooksTable(userToken, message);
   }, []);
   // console.log(booksData, 'array');
+
   const data = {
     nodes: booksData.filter((item) =>
       item.title.toLowerCase().includes(search.toLowerCase())
     ),
   };
-  const theme = useTheme(THEME);
+  const theme = useTheme(getTheme());
   return (
     <>
       <label htmlFor='search'>
         Search book by title:
-        <input id='search' type='text' onChange={handleSearch} />
+        <Input
+          id='search'
+          type='text'
+          placeholder='enter book title here...'
+          onChange={handleSearch}
+        />
       </label>
 
       <Table data={data} theme={theme}>
@@ -99,7 +113,6 @@ const BookList = () => {
                 <HeaderCell>Status</HeaderCell>
                 <HeaderCell>Note</HeaderCell>
                 <HeaderCell>Action</HeaderCell>
-                <HeaderCell></HeaderCell>
               </HeaderRow>
             </Header>
             <Body>
@@ -112,14 +125,7 @@ const BookList = () => {
                     <Cell>{item.status}</Cell>
                     <Cell>{item.note}</Cell>
                     <Cell>
-                      <button type='button' className='editButton'>
-                        edit
-                      </button>
-                    </Cell>
-                    <Cell>
-                      <button type='button' className='deleteButton'>
-                        delete
-                      </button>
+                      <DropListButton bookID={item._id} />
                     </Cell>
                   </Row>
                 );
