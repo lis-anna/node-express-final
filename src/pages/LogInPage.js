@@ -6,6 +6,14 @@ import { FaEye, FaEyeSlash } from 'react-icons/fa';
 import { useCookies } from 'react-cookie';
 import { authAtom } from '../state/atom-auth';
 //import { useSetRecoilState } from 'recoil';
+import {
+  Button,
+  Input,
+  FormControl,
+  FormLabel,
+  FormErrorMessage,
+  FormHelperText,
+} from '@chakra-ui/react';
 
 const LogInPage = () => {
   const [logInError, setLogInError] = useState(false);
@@ -41,55 +49,60 @@ const LogInPage = () => {
 
   return (
     <div>
-      {/* <h1 className='logo'><em>Lifestyle:</em><br></br>
-      tracking all of life's tasks
-      </h1> */}
       <div className='auth-form-container'>
-        <form
-          id='formBkgd'
-          action=''
-          onSubmit={submitLogIn}
-          className='login-form'
-        >
-          <h1 className='logAvatar'>
-            {/* <FaUserCircle style={{ marginLeft: '20px' }} /> */}
-            <h2 className='logo'>
-              <em>Library book list</em>
-            </h2>
-            <NavLink
-              to='/register'
-              className='register'
-              style={{ border: 'none', fontSize: '14px' }}
-            >
-              Create an account
-            </NavLink>
-          </h1>
-          <div className='inputFields'>
-            <label>
-              Email: <br></br>
-              <input type='text' name='email' placeholder='email' />
-            </label>
-            <br />
-            <label>
-              Password:<br></br>
-              <input
-                type={passwordShown ? 'text' : 'password'}
-                name='password'
-                placeholder='password'
-              />
-            </label>
+        <FormControl>
+          <form
+            id='formBkgd'
+            action=''
+            onSubmit={submitLogIn}
+            className='login-form'
+          >
+            <h1 className='logAvatar'>
+              <h2 className='logo'>
+                <em>Library book list</em>
+              </h2>
+              <NavLink
+                to='/register'
+                className='register'
+                style={{ border: 'none', fontSize: '14px' }}
+              >
+                Create an account
+              </NavLink>
+            </h1>
+            <div className='inputFields'>
+              <FormLabel>
+                Email:
+                <Input
+                  type='email'
+                  name='email'
+                  placeholder='email'
+                  id='email'
+                />
+              </FormLabel>
+              <br />
+              <FormLabel>
+                Password:
+                <Input
+                  type={passwordShown ? 'text' : 'password'}
+                  name='password'
+                  placeholder='password'
+                  id='password'
+                />
+              </FormLabel>
 
-            <button className='logbtn' type='submit'>
-              Login
-            </button>
+              <Button className='logbtn' type='submit'>
+                Login
+              </Button>
 
-            {logInError ? (
-              <p className='login-error'>
-                <small>Invalid Password or Username</small>
-              </p>
-            ) : null}
-          </div>
-        </form>
+              {logInError ? (
+                <p className='login-error'>
+                  <small>Invalid Password or Username</small>
+                </p>
+              ) : null}
+            </div>
+          </form>
+        </FormControl>
+        a
         <button id='eye' onClick={togglePassword}>
           {passwordShown ? <FaEyeSlash /> : <FaEye />}
         </button>
