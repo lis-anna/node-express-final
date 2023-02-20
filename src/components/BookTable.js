@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import DropListButton from './Dropdown/DropListButton';
 import {
   Table,
@@ -32,57 +32,12 @@ import { Input } from '@chakra-ui/react';
   `,
 };*/
 
-const BookList = () => {
-  const userToken = JSON.parse(localStorage.getItem('token'));
-  let message = {};
-  const [booksData, setBooksData] = useState([]);
+const BookTable = ({ booksData, handleBookUpdate, handleBookDelete }) => {
   const [search, setSearch] = useState('');
-  // const [filters, setFilters] = useState([]);
 
   const handleSearch = (event) => {
     setSearch(event.target.value);
   };
-
-  /*const handleFilter = (filter) => {
-    filters.includes(filter)
-      ? setFilters(filters.filter((value) => value !== filter))
-      : setFilters(filters.concat(filter));
-  };*/
-
-  useEffect(() => {
-    const buildbooksTable = async function (token, message) {
-      try {
-        const response = await fetch('/api/v1/books', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        let bookDataArray = [];
-        const data = await response.json();
-        if (response.status === 200) {
-          if (data.count === 0) {
-            return 0;
-          } else {
-            data.books.map((bookItem) =>
-              bookDataArray.push(Object.values(bookItem))
-            );
-
-            setBooksData(Array.from(data.books));
-          }
-        } else {
-          message.textContent = data.msg;
-          return 0;
-        }
-      } catch (err) {
-        message.textContent = 'A communication error occurred.';
-        return 0;
-      }
-    };
-    buildbooksTable(userToken, message);
-  }, []);
-  // console.log(booksData, 'array');
 
   const data = {
     nodes: booksData.filter((item) =>
@@ -125,7 +80,12 @@ const BookList = () => {
                     <Cell>{item.status}</Cell>
                     <Cell>{item.note}</Cell>
                     <Cell>
-                      <DropListButton bookID={item._id} />
+                      <DropListButton
+                        bookID={item._id}
+                        handleBookUpdate={handleBookUpdate}
+                        handleBookDelete={handleBookDelete}
+                        bookParams={item}
+                      />
                     </Cell>
                   </Row>
                 );
@@ -138,4 +98,4 @@ const BookList = () => {
   );
 };
 
-export default BookList;
+export default BookTable;

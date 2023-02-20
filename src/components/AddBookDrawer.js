@@ -21,7 +21,7 @@ import BookAPI from './API/booksAPI';
 
 //Add book form. This form uses chakra UI drawer
 
-const AddBookDrawer = ({ bookList }) => {
+const AddBookDrawer = ({ handleNewBook }) => {
   //control of the drawer state
   const { isOpen, onOpen, onClose } = useDisclosure();
   const btnRef = React.useRef();
@@ -33,8 +33,8 @@ const AddBookDrawer = ({ bookList }) => {
     'unavailable',
     'available',
   ];
-  //function handling Save button. Calls API
-  const handleAddBook = (event) => {
+  //function handling Save button. Calls book API, returns new book data to parent
+  const handleAddBook = async (event) => {
     const bookParams = {
       author: event.target.d_author.value,
       title: event.target.d_title.value,
@@ -42,11 +42,17 @@ const AddBookDrawer = ({ bookList }) => {
       status: event.target.d_status.value,
       note: event.target.d_note.value,
     };
-    // console.log(bookParams);
-    const newBook = BookAPI.addBook(bookParams, userToken);
+
+    const newBook = await BookAPI.addBook(bookParams, userToken).then(
+      (newBookParams) => {
+        //  setNewBookParams(response);
+        handleNewBook(newBookParams);
+      }
+    );
+
     if (newBook) alert('Book added');
     onClose();
-    bookList = [...bookList, newBook];
+    //console.log(newBookParams, 'new book params');
   };
 
   return (
@@ -56,6 +62,7 @@ const AddBookDrawer = ({ bookList }) => {
         ref={btnRef}
         colorScheme='teal'
         onClick={onOpen}
+        id='d_opn_btn'
       >
         New book
       </Button>
@@ -65,6 +72,7 @@ const AddBookDrawer = ({ bookList }) => {
         size='md'
         onClose={onClose}
         finalFocusRef={btnRef}
+        id='rt_sd_drawer'
       >
         <DrawerOverlay />
         <DrawerContent>
@@ -84,9 +92,13 @@ const AddBookDrawer = ({ bookList }) => {
                 <Input type='text' id='d_isbn' placeholder='ISBN...' />
                 <Box>
                   <FormLabel htmlFor='d_status'>Select status</FormLabel>
-                  <Select id='d_status' defaultValue='Pending'>
+                  <Select id='d_status' defaultValue='pending'>
                     {statuses.map((status) => {
-                      return <option value={status}>{status}</option>;
+                      return (
+                        <option key={statuses.indexOf(status)} value={status}>
+                          {status}
+                        </option>
+                      );
                     })}
                   </Select>
                 </Box>

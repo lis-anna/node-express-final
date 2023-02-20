@@ -24,7 +24,8 @@ class BookAPI {
         }
       )
       .then((result) => {
-        return result.data.books;
+        //    console.log(result.data.book, 'result.data.book');
+        return result.data.book;
       })
       .catch((error) =>
         console.log('Whoops, the book adding process went wrong!', error)
@@ -32,9 +33,8 @@ class BookAPI {
   }
 
   //Change existing record
-
-  static async updateToDo(newBookParams, bookID, bookData, bearerKey) {
-    console.log("I'm here updating book", bookID, newBookParams);
+  static async editBook(newBookParams, bookID, bearerKey) {
+    // console.log("I'm here updating book", bookID, newBookParams);
     return await axios
       .patch(
         apiURL + `/books/${bookID}`,
@@ -54,12 +54,8 @@ class BookAPI {
         }
       )
       .then((result) => {
-        console.log(result);
-        //this should be optimized
-        const updatedList = bookData.map((bookItem) =>
-          bookItem._id === bookID ? result.data.bookItem : bookItem
-        );
-        return updatedList;
+        //  console.log(result.data);
+        return result.data.book;
       })
       .catch((error) =>
         console.log('Whoops, the book editing process went wrong!', error)
@@ -67,8 +63,7 @@ class BookAPI {
   }
 
   //Delete record
-  static async deleteToDo(bookID, bookData, bearerKey) {
-    //   console.log(todo);
+  static async deleteBook(bookID, bearerKey) {
     return await axios
       .delete(apiURL + `/books/${bookID}`, {
         headers: {
@@ -78,16 +73,13 @@ class BookAPI {
         },
       })
       .then((result) => {
-        //console.log(result);
-        const updatedList = bookData.filter((e) => e._id !== bookID);
-        return updatedList;
+        //  console.log(result.status);
+        return result.status;
       })
       .catch((error) =>
         console.log('Whoops, the book deleting process went wrong!', error)
       );
   }
-
-  //Move to favorites
 }
 
 export default BookAPI;
