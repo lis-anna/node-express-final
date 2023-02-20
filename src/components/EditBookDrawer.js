@@ -16,15 +16,21 @@ import {
   DrawerContent,
   DrawerCloseButton,
 } from '@chakra-ui/react';
-import { AddIcon } from '@chakra-ui/icons';
+
 import BookAPI from './API/booksAPI';
 
 //Add book form. This form uses chakra UI drawer
 
-const AddBookDrawer = ({ handleNewBook }) => {
+const EditBookDrawer = ({
+  handleBookUpdate,
+  buttonRef,
+  oldBookParams,
+  bookID,
+  //onOpen,
+}) => {
   //control of the drawer state
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const btnRef = React.useRef();
+  // const btnRef = React.useRef();
   const userToken = JSON.parse(localStorage.getItem('token'));
   const statuses = [
     'pending',
@@ -33,9 +39,11 @@ const AddBookDrawer = ({ handleNewBook }) => {
     'unavailable',
     'available',
   ];
+  const { author, title, isbn, status, note } = { oldBookParams };
+  console.log(author, 'author');
   //function handling Save button. Calls book API, returns new book data to parent
-  const handleAddBook = async (event) => {
-    const bookParams = {
+  const handleEditBook = async (event) => {
+    const newBookParams = {
       author: event.target.d_author.value,
       title: event.target.d_title.value,
       isbn: event.target.d_isbn.value,
@@ -43,56 +51,49 @@ const AddBookDrawer = ({ handleNewBook }) => {
       note: event.target.d_note.value,
     };
 
-    const newBook = await BookAPI.addBook(bookParams, userToken).then(
-      (newBookParams) => {
-        //  setNewBookParams(response);
-        handleNewBook(newBookParams);
-      }
-    );
+    const updatedBook = await BookAPI.editBook(
+      newBookParams,
+      bookID,
+      userToken
+    ).then((newBookParams) => {
+      //  setNewBookParams(response);
+      handleBookUpdate(newBookParams);
+    });
 
-    if (newBook) alert('Book added');
+    if (updatedBook) alert('Book updated');
     onClose();
     //console.log(newBookParams, 'new book params');
   };
 
   return (
     <>
-      <Button
-        leftIcon={<AddIcon />}
-        ref={btnRef}
-        colorScheme='teal'
-        onClick={onOpen}
-        id='d_opn_btn'
-      >
-        New book
-      </Button>
       <Drawer
         isOpen={isOpen}
         placement='right'
         size='md'
         onClose={onClose}
-        finalFocusRef={btnRef}
-        id='rt_sd_drawer'
+        finalFocusRef={buttonRef}
+        id='ed_sd_drawer'
       >
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Add new book</DrawerHeader>
+          <DrawerHeader>Edit book data</DrawerHeader>
           <form
-            id='my-form'
+            id='edit-form'
             onSubmit={(e) => {
               e.preventDefault();
-              handleAddBook(e);
+              handleEditBook(e);
             }}
           >
             <DrawerBody>
               <Stack spacing='24px'>
-                <Input type='text' id='d_author' placeholder='author...' />
-                <Input type='text' id='d_title' placeholder='title...' />
-                <Input type='text' id='d_isbn' placeholder='ISBN...' />
+                <Input type='text' id='ed_author' value={author} />
+                <Input type='text' id='ed_title' value={title} />
+                <Input type='text' id='ed_isbn' value={isbn} />
                 <Box>
-                  <FormLabel htmlFor='d_status'>Select status</FormLabel>
-                  <Select id='d_status' defaultValue='pending'>
+                  <FormLabel htmlFor='ed_status'>Select status</FormLabel>
+                  <Select id='ed_status' value={status}>
                     {statuses.map((status) => {
                       return (
                         <option key={statuses.indexOf(status)} value={status}>
@@ -104,8 +105,8 @@ const AddBookDrawer = ({ handleNewBook }) => {
                 </Box>
 
                 <Box>
-                  <FormLabel htmlFor='d_note'>Note</FormLabel>
-                  <Textarea id='d_note' />
+                  <FormLabel htmlFor='ed_note'>Note</FormLabel>
+                  <Textarea id='ed_note' value={note} />
                 </Box>
               </Stack>
             </DrawerBody>
@@ -125,4 +126,4 @@ const AddBookDrawer = ({ handleNewBook }) => {
   );
 };
 
-export default AddBookDrawer;
+export default EditBookDrawer;

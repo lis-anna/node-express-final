@@ -24,7 +24,8 @@ class BookAPI {
         }
       )
       .then((result) => {
-        return result.data.books;
+        //    console.log(result.data.book, 'result.data.book');
+        return result.data.book;
       })
       .catch((error) =>
         console.log('Whoops, the book adding process went wrong!', error)
@@ -33,7 +34,7 @@ class BookAPI {
 
   //Change existing record
 
-  static async updateToDo(newBookParams, bookID, bookData, bearerKey) {
+  static async editBook(newBookParams, bookID, bearerKey) {
     console.log("I'm here updating book", bookID, newBookParams);
     return await axios
       .patch(
@@ -54,12 +55,13 @@ class BookAPI {
         }
       )
       .then((result) => {
-        console.log(result);
+        console.log(result.data);
         //this should be optimized
-        const updatedList = bookData.map((bookItem) =>
+        return result.data.book;
+        /* const updatedList = bookData.map((bookItem) =>
           bookItem._id === bookID ? result.data.bookItem : bookItem
         );
-        return updatedList;
+        return updatedList;*/
       })
       .catch((error) =>
         console.log('Whoops, the book editing process went wrong!', error)
