@@ -19,4 +19,3 @@ root.render(
     </ChakraProvider>
   </React.StrictMode>
 );
-export default { root };

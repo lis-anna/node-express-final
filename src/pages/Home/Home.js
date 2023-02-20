@@ -50,9 +50,10 @@ function Home() {
     const updatedList = booksData.map((bookItem) =>
       bookItem._id === newBookParams._id ? newBookParams : bookItem
     );
-    console.log(updatedList);
-
     setBooksData(updatedList);
+  };
+  const handleBookDelete = (bookID) => {
+    setBooksData(booksData.filter((bookItem) => bookItem._id !== bookID));
   };
 
   return (
@@ -64,6 +65,7 @@ function Home() {
       <BookTable
         booksData={booksData}
         handleBookUpdate={handleBookUpdate}
+        handleBookDelete={handleBookDelete}
       ></BookTable>
     </>
   );

@@ -32,7 +32,7 @@ import { Input } from '@chakra-ui/react';
   `,
 };*/
 
-const BookTable = ({ booksData, handleBookUpdate }) => {
+const BookTable = ({ booksData, handleBookUpdate, handleBookDelete }) => {
   const [search, setSearch] = useState('');
 
   const handleSearch = (event) => {
@@ -83,6 +83,7 @@ const BookTable = ({ booksData, handleBookUpdate }) => {
                       <DropListButton
                         bookID={item._id}
                         handleBookUpdate={handleBookUpdate}
+                        handleBookDelete={handleBookDelete}
                         bookParams={item}
                       />
                     </Cell>
