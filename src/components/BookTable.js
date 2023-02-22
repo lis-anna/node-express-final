@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import DropListButton from './Dropdown/DropListButton';
+import DropListButton from './DropdownAndEditDrawer/DropListButton';
 import {
   Table,
   Header,
@@ -11,7 +11,7 @@ import {
 } from '@table-library/react-table-library/table';
 import { useTheme } from '@table-library/react-table-library/theme';
 import { getTheme } from '@table-library/react-table-library/baseline';
-import { Input } from '@chakra-ui/react';
+import { Input, Box } from '@chakra-ui/react';
 
 /*const THEME = {
   HeaderRow: `
@@ -47,53 +47,53 @@ const BookTable = ({ booksData, handleBookUpdate, handleBookDelete }) => {
   const theme = useTheme(getTheme());
   return (
     <>
-      <label htmlFor='search'>
-        Search book by title:
+      <Box w='50%' p={4} className='search-box'>
         <Input
           id='search'
           type='text'
-          placeholder='enter book title here...'
+          placeholder='Search book title...'
           onChange={handleSearch}
         />
-      </label>
-
-      <Table data={data} theme={theme}>
-        {(tableList) => (
-          <>
-            <Header>
-              <HeaderRow>
-                <HeaderCell>Author</HeaderCell>
-                <HeaderCell>Title</HeaderCell>
-                <HeaderCell>ISBN</HeaderCell>
-                <HeaderCell>Status</HeaderCell>
-                <HeaderCell>Note</HeaderCell>
-                <HeaderCell>Action</HeaderCell>
-              </HeaderRow>
-            </Header>
-            <Body>
-              {tableList.map((item) => {
-                return (
-                  <Row key={item._id} item={item}>
-                    <Cell>{item.author}</Cell>
-                    <Cell>{item.title}</Cell>
-                    <Cell>{item.isbn}</Cell>
-                    <Cell>{item.status}</Cell>
-                    <Cell>{item.note}</Cell>
-                    <Cell>
-                      <DropListButton
-                        bookID={item._id}
-                        handleBookUpdate={handleBookUpdate}
-                        handleBookDelete={handleBookDelete}
-                        bookParams={item}
-                      />
-                    </Cell>
-                  </Row>
-                );
-              })}
-            </Body>
-          </>
-        )}
-      </Table>
+      </Box>
+      <Box>
+        <Table data={data} theme={theme}>
+          {(tableList) => (
+            <>
+              <Header>
+                <HeaderRow>
+                  <HeaderCell>Author</HeaderCell>
+                  <HeaderCell>Title</HeaderCell>
+                  <HeaderCell>ISBN</HeaderCell>
+                  <HeaderCell>Status</HeaderCell>
+                  <HeaderCell>Note</HeaderCell>
+                  <HeaderCell>Action</HeaderCell>
+                </HeaderRow>
+              </Header>
+              <Body>
+                {tableList.map((item) => {
+                  return (
+                    <Row key={item._id} item={item}>
+                      <Cell>{item.author}</Cell>
+                      <Cell>{item.title}</Cell>
+                      <Cell>{item.isbn}</Cell>
+                      <Cell>{item.status}</Cell>
+                      <Cell>{item.note}</Cell>
+                      <Cell>
+                        <DropListButton
+                          bookID={item._id}
+                          handleBookUpdate={handleBookUpdate}
+                          handleBookDelete={handleBookDelete}
+                          bookParams={item}
+                        />
+                      </Cell>
+                    </Row>
+                  );
+                })}
+              </Body>
+            </>
+          )}
+        </Table>
+      </Box>
     </>
   );
 };

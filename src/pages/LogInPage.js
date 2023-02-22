@@ -2,30 +2,31 @@ import { useState } from 'react';
 import { login } from '../components/API/Auth';
 import { useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import Header from '../components/Header/Header';
 import { useCookies } from 'react-cookie';
-import { authAtom } from '../state/atom-auth';
+import '../pages/pages.css';
+
 //import { useSetRecoilState } from 'recoil';
 import {
+  AlertIcon,
   Button,
   Input,
+  InputGroup,
+  InputRightElement,
   FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
+  Box,
+  Stack,
+  Center,
+  Alert,
 } from '@chakra-ui/react';
+import FrontLogo from '../components/LogoAndTitle/FrontLogo';
 
 const LogInPage = () => {
   const [logInError, setLogInError] = useState(false);
-  const [passwordShown, setPasswordShown] = useState(false);
   const navigate = useNavigate();
   //const setAuth = useSetRecoilState(authAtom);
-
-  const togglePassword = () => {
-    // When the handler is invoked
-    // inverse the boolean state of passwordShown
-    setPasswordShown(!passwordShown);
-  };
+  const [show, setShow] = useState(false);
+  const handleClick = () => setShow(!show);
 
   const submitLogIn = async (e) => {
     try {
@@ -48,66 +49,74 @@ const LogInPage = () => {
   };
 
   return (
-    <div>
-      <div className='auth-form-container'>
-        <FormControl>
-          <form
-            id='formBkgd'
-            action=''
-            onSubmit={submitLogIn}
-            className='login-form'
-          >
-            <h1 className='logAvatar'>
-              <h2 className='logo'>
-                <em>Library book list</em>
-              </h2>
-              <NavLink
-                to='/register'
-                className='register'
-                style={{ border: 'none', fontSize: '14px' }}
-              >
-                Create an account
-              </NavLink>
-            </h1>
-            <div className='inputFields'>
-              <FormLabel>
-                Email:
-                <Input
-                  type='email'
-                  name='email'
-                  placeholder='email'
-                  id='email'
-                />
-              </FormLabel>
-              <br />
-              <FormLabel>
-                Password:
-                <Input
-                  type={passwordShown ? 'text' : 'password'}
-                  name='password'
-                  placeholder='password'
-                  id='password'
-                />
-              </FormLabel>
+    <>
+      <div>
+        <Header className='page-header'></Header>
+        <FrontLogo></FrontLogo>
+        <div className='auth-form-container'>
+          <FormControl>
+            <form
+              id='formBkgd'
+              action=''
+              onSubmit={submitLogIn}
+              className='login-form'
+            >
+              <Center>
+                <Box className='inputFields' w='50%'>
+                  <Stack align='center'>
+                    <Input
+                      variant='flushed'
+                      type='email'
+                      name='email'
+                      placeholder='Enter email'
+                      id='email'
+                    />
+                    <InputGroup size='md'>
+                      <Input
+                        variant='flushed'
+                        pr='4.5rem'
+                        type={show ? 'text' : 'password'}
+                        placeholder='Enter password'
+                        id='password'
+                      />
+                      <InputRightElement width='4.5rem'>
+                        <Button h='1.75rem' size='sm' onClick={handleClick}>
+                          {show ? 'Hide' : 'Show'}
+                        </Button>
+                      </InputRightElement>
+                    </InputGroup>
+                    <Button
+                      className='loginbtn'
+                      type='submit'
+                      w='50%'
+                      colorScheme='teal'
+                    >
+                      Login
+                    </Button>
+                    <h2 className='reglink'>
+                      <NavLink
+                        to='/register'
+                        className='register'
+                        style={{ border: 'none', fontSize: '0.9em' }}
+                      >
+                        Create an account
+                      </NavLink>
+                    </h2>
+                  </Stack>
 
-              <Button className='logbtn' type='submit'>
-                Login
-              </Button>
-
-              {logInError ? (
-                <p className='login-error'>
-                  <small>Invalid Password or Username</small>
-                </p>
-              ) : null}
-            </div>
-          </form>
-        </FormControl>
-        a
-        <button id='eye' onClick={togglePassword}>
-          {passwordShown ? <FaEyeSlash /> : <FaEye />}
-        </button>
+                  {logInError ? (
+                    <Alert status='error' className='login-error'>
+                      <AlertIcon />
+                      Invalid Password or Username
+                    </Alert>
+                  ) : null}
+                </Box>
+              </Center>
+            </form>
+          </FormControl>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
