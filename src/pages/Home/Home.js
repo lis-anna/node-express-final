@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import BookTable from '../../components/BookTable';
 import AddBookDrawer from '../../components/AddBookDrawer';
+import Header from '../../components/Header/Header';
+import { Center, Heading, Avatar } from '@chakra-ui/react';
 
 function Home() {
   const userToken = JSON.parse(localStorage.getItem('token'));
@@ -58,7 +60,18 @@ function Home() {
 
   return (
     <>
-      <h1 className='welcome'>Welcome !</h1>
+      <Header></Header>
+      <Center className='logo-hor'>
+        <Avatar
+          size='lg'
+          src='https://i.postimg.cc/JhCwD5qr/book-logo.jpg'
+          ignoreFallback='true'
+          showBorder='false'
+        ></Avatar>
+        <Heading as='h1' size='lg' className='pageTitle'>
+          Just open a book ...
+        </Heading>
+      </Center>
       <AddBookDrawer handleNewBook={handleNewBook}></AddBookDrawer>
       <br></br>
       <br></br>
