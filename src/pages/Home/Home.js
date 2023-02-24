@@ -2,7 +2,9 @@ import React, { useState, useEffect } from 'react';
 import BookTable from '../../components/BookTable';
 import AddBookDrawer from '../../components/AddBookDrawer';
 import Header from '../../components/Header/Header';
-import { Center, Heading, Avatar } from '@chakra-ui/react';
+import LogOutBtn from '../../components/LogoutBtn';
+import UserLogo from '../../components/LogoAndTitle/UserLogo';
+import { Center, Heading, Avatar, Flex, Box, HStack } from '@chakra-ui/react';
 
 function Home() {
   const userToken = JSON.parse(localStorage.getItem('token'));
@@ -61,7 +63,8 @@ function Home() {
   return (
     <>
       <Header></Header>
-      <Center className='logo-hor'>
+
+      <HStack className='logo-hor'>
         <Avatar
           size='lg'
           src='https://i.postimg.cc/JhCwD5qr/book-logo.jpg'
@@ -71,15 +74,32 @@ function Home() {
         <Heading as='h1' size='lg' className='pageTitle'>
           Just open a book ...
         </Heading>
-      </Center>
-      <AddBookDrawer handleNewBook={handleNewBook}></AddBookDrawer>
-      <br></br>
-      <br></br>
-      <BookTable
-        booksData={booksData}
-        handleBookUpdate={handleBookUpdate}
-        handleBookDelete={handleBookDelete}
-      ></BookTable>
+        <HStack id='userLine'>
+          <UserLogo></UserLogo>
+          <LogOutBtn></LogOutBtn>
+        </HStack>
+      </HStack>
+      {booksData.length === 0 ? (
+        <Box>
+          <Center>
+            <Heading as='h3' size='m' className='pageTitle'>
+              No books added to the list yet
+            </Heading>
+          </Center>
+          <AddBookDrawer handleNewBook={handleNewBook}></AddBookDrawer>
+        </Box>
+      ) : (
+        <>
+          <AddBookDrawer handleNewBook={handleNewBook}></AddBookDrawer>
+          <br></br>
+          <br></br>
+          <BookTable
+            booksData={booksData}
+            handleBookUpdate={handleBookUpdate}
+            handleBookDelete={handleBookDelete}
+          ></BookTable>
+        </>
+      )}
     </>
   );
 }

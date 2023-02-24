@@ -1,25 +1,6 @@
 //import { useColorMode } from 'react-use-color-mode';
 
-import {
-  AlertIcon,
-  IconButton,
-  Button,
-  Divider,
-  Image,
-  Input,
-  InputGroup,
-  InputRightElement,
-  FormControl,
-  FormLabel,
-  FormErrorMessage,
-  FormHelperText,
-  Box,
-  Stack,
-  Center,
-  Heading,
-  Switch,
-} from '@chakra-ui/react';
-import { SwitchIcon } from '@chakra-ui/icons';
+import { Box, Divider } from '@chakra-ui/react';
 
 const Header = () => {
   return (
