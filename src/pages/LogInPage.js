@@ -2,8 +2,10 @@ import { useState } from 'react';
 import { login } from '../components/API/Auth';
 import { useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import Header from '../components/Header/Header';
 import { useCookies } from 'react-cookie';
+import Header from '../components/Header/Header';
+import FrontLogo from '../components/LogoAndTitle/FrontLogo';
+
 import '../pages/pages.css';
 
 //import { useSetRecoilState } from 'recoil';
@@ -19,7 +21,6 @@ import {
   Center,
   Alert,
 } from '@chakra-ui/react';
-import FrontLogo from '../components/LogoAndTitle/FrontLogo';
 
 const LogInPage = () => {
   const [logInError, setLogInError] = useState(false);
@@ -70,6 +71,7 @@ const LogInPage = () => {
                       name='email'
                       placeholder='Enter email'
                       id='email'
+                      isRequired={true}
                     />
                     <InputGroup size='md'>
                       <Input
@@ -78,6 +80,7 @@ const LogInPage = () => {
                         type={show ? 'text' : 'password'}
                         placeholder='Enter password'
                         id='password'
+                        isRequired={true}
                       />
                       <InputRightElement width='4.5rem'>
                         <Button h='1.75rem' size='sm' onClick={handleClick}>

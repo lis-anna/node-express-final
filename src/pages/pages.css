@@ -5,6 +5,13 @@
 .logo-hor {
   margin-top: 1em;
   margin-bottom: 1em;
+  margin-left: auto;
+}
+#userLine {
+  margin-left: auto;
+}
+.logout {
+  margin-left: auto;
 }
 .pageTitle {
   color: rgb(69, 74, 74);
