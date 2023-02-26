@@ -23,6 +23,7 @@ import {
   DrawerCloseButton,
 } from '@chakra-ui/react';
 import { DeleteIcon, EditIcon, HamburgerIcon } from '@chakra-ui/icons';
+import '../../pages/pages.css';
 
 //this is a dropdown menu, opening dleft side drawer on edit menu option click
 
@@ -86,7 +87,7 @@ const DropListButton = ({
 
   return (
     <>
-      <Box>
+      <Box className='droplist'>
         <Menu>
           <MenuButton
             as={IconButton}
@@ -101,7 +102,6 @@ const DropListButton = ({
                 // e.preventDefault();
                 onOpen();
               }}
-              command='⌘T'
               id={editBtnID}
               ref={btnRef}
             >
@@ -110,7 +110,6 @@ const DropListButton = ({
             <MenuItem
               icon={<DeleteIcon />}
               onClick={handleDelete}
-              command='⌘N'
               id={delBtnID}
             >
               Delete

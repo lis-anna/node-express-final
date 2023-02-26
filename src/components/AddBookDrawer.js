@@ -18,6 +18,7 @@ import {
 } from '@chakra-ui/react';
 import { AddIcon } from '@chakra-ui/icons';
 import BookAPI from './API/booksAPI';
+import '.././pages/pages.css';
 
 //Add book form. This form uses chakra UI drawer
 
