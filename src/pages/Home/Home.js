@@ -4,8 +4,8 @@ import AddBookDrawer from '../../components/AddBookDrawer';
 import Header from '../../components/Header/Header';
 import LogOutBtn from '../../components/LogoutBtn';
 import UserLogo from '../../components/LogoAndTitle/UserLogo';
-import { Center, Heading, Avatar, Flex, Box, HStack } from '@chakra-ui/react';
-
+import { Center, Heading, Avatar, Box, HStack } from '@chakra-ui/react';
+import '../../pages/pages.css';
 function Home() {
   const userToken = JSON.parse(localStorage.getItem('token'));
   let message = {};
@@ -93,11 +93,13 @@ function Home() {
           <AddBookDrawer handleNewBook={handleNewBook}></AddBookDrawer>
           <br></br>
           <br></br>
-          <BookTable
-            booksData={booksData}
-            handleBookUpdate={handleBookUpdate}
-            handleBookDelete={handleBookDelete}
-          ></BookTable>
+          <Box className='booktable'>
+            <BookTable
+              booksData={booksData}
+              handleBookUpdate={handleBookUpdate}
+              handleBookDelete={handleBookDelete}
+            ></BookTable>
+          </Box>
         </>
       )}
     </>

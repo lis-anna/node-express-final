@@ -2,6 +2,7 @@ import { Button } from '@chakra-ui/react';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
+import '../pages/pages.css';
 
 const LogOutBtn = () => {
   const navigate = useNavigate();
@@ -18,6 +19,7 @@ const LogOutBtn = () => {
       variant='outline'
       onClick={submitLogOut}
       className='logout'
+      id='d_logt_btn'
     >
       Log out
     </Button>
