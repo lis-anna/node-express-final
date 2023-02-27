@@ -28,7 +28,7 @@ class BookAPI {
         return result;
       })
       .catch((error) => {
-        console.log('Whoops, the book adding process went wrong!', error);
+        //  console.log('Whoops, the book adding process went wrong!', error);
         return error;
       });
   }
@@ -56,11 +56,12 @@ class BookAPI {
       )
       .then((result) => {
         //  console.log(result.data);
-        return result.data.book;
+        return result;
       })
-      .catch((error) =>
-        console.log('Whoops, the book editing process went wrong!', error)
-      );
+      .catch((error) => {
+        //     console.log('Whoops, the book editing process went wrong!', error);
+        return error;
+      });
   }
 
   //Delete record

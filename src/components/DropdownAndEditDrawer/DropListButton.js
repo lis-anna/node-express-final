@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import BookAPI from '../API/booksAPI';
 import {
-  useDisclosure,
+  Alert,
+  AlertIcon,
   IconButton,
   Menu,
   MenuButton,
@@ -21,11 +22,12 @@ import {
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
+  useDisclosure,
 } from '@chakra-ui/react';
 import { DeleteIcon, EditIcon, HamburgerIcon } from '@chakra-ui/icons';
 import '../../pages/pages.css';
 
-//this is a dropdown menu, opening dleft side drawer on edit menu option click
+//this is a dropdown menu, opening left side drawer on edit menu option click
 
 const DropListButton = ({
   bookID,
@@ -46,6 +48,9 @@ const DropListButton = ({
     'available',
   ];
   const [bookState, setBookState] = useState(bookParams);
+  //error handling state variables
+  const [dataError, setDataError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   function handleChange(e) {
     const { name, value } = e.target;
@@ -54,6 +59,15 @@ const DropListButton = ({
       [name]: value,
     }));
   }
+  //custom closign function to clear error messages before closing
+  const handleClose = () => {
+    setDataError(false);
+    setErrorMessage('');
+    onClose();
+    //restore form pre-filled input
+    setBookState(bookParams);
+  };
+
   //this function gets new attributes from the drawer form and sends it to database
   const handleEditBook = async (event) => {
     event.preventDefault();
@@ -64,16 +78,21 @@ const DropListButton = ({
       status: event.target.ed_status.value,
       note: event.target.ed_note.value,
     };
-
-    const updatedBook = await BookAPI.editBook(
-      newBookParams,
-      bookID,
-      userToken
-    ).then((newBookParams) => {
-      handleBookUpdate(newBookParams);
+    //callBookAPI and update book data
+    await BookAPI.editBook(newBookParams, bookID, userToken).then((result) => {
+      if (result.status !== 200) {
+        //if status code is not 200, it means that we got an API error, we handle it and save to state variable
+        //   console.log(result.response.data.msg, 'result.response.data.msg');
+        setDataError(true);
+        const message = result.response.data.msg.split(',').join(', ');
+        setErrorMessage(message);
+      } else {
+        // code = 200, updated successfully
+        handleBookUpdate(result.data.book);
+        alert('Book updated');
+        handleClose();
+      }
     });
-    if (updatedBook) alert('Book updated');
-    onClose();
   };
 
   //this function is deleting a book from the list
@@ -98,10 +117,7 @@ const DropListButton = ({
           <MenuList>
             <MenuItem
               icon={<EditIcon />}
-              onClick={(e) => {
-                // e.preventDefault();
-                onOpen();
-              }}
+              onClick={onOpen}
               id={editBtnID}
               ref={btnRef}
             >
@@ -126,7 +142,7 @@ const DropListButton = ({
         >
           <DrawerOverlay />
           <DrawerContent>
-            <DrawerCloseButton />
+            <DrawerCloseButton onClose={handleClose} />
             <DrawerHeader>Edit book data</DrawerHeader>
             <form id='edit-form' onSubmit={handleEditBook}>
               <DrawerBody>
@@ -186,7 +202,7 @@ const DropListButton = ({
               </DrawerBody>
 
               <DrawerFooter>
-                <Button variant='outline' mr={3} onClick={onClose}>
+                <Button variant='outline' mr={3} onClick={handleClose}>
                   Cancel
                 </Button>
                 <Button colorScheme='teal' type='submit'>
@@ -194,6 +210,12 @@ const DropListButton = ({
                 </Button>
               </DrawerFooter>
             </form>
+            {dataError ? (
+              <Alert status='error' className='data-error'>
+                <AlertIcon />
+                {errorMessage}
+              </Alert>
+            ) : null}
           </DrawerContent>
         </Drawer>
       </Box>
