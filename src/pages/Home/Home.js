@@ -4,12 +4,22 @@ import AddBookDrawer from '../../components/AddBookDrawer';
 import Header from '../../components/Header/Header';
 import LogOutBtn from '../../components/LogoutBtn';
 import UserLogo from '../../components/LogoAndTitle/UserLogo';
-import { Center, Heading, Avatar, Box, HStack } from '@chakra-ui/react';
+import {
+  Alert,
+  AlertIcon,
+  Center,
+  Heading,
+  Avatar,
+  Box,
+  HStack,
+} from '@chakra-ui/react';
 import '../../pages/pages.css';
 function Home() {
   const userToken = JSON.parse(localStorage.getItem('token'));
   let message = {};
   const [booksData, setBooksData] = useState([]);
+  const [dataError, setDataError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
     const getBooksData = async function (token, message) {
@@ -24,6 +34,7 @@ function Home() {
         let bookDataArray = [];
         const data = await response.json();
         if (response.status === 200) {
+          setDataError(false);
           if (data.count === 0) {
             return 0;
           } else {
@@ -34,11 +45,15 @@ function Home() {
             setBooksData(Array.from(data.books));
           }
         } else {
-          message.textContent = data.msg;
+          setDataError(true);
+          setErrorMessage(data.msg);
           return 0;
         }
       } catch (err) {
+        setDataError(true);
+        setErrorMessage(err.response.data.msg);
         message.textContent = 'A communication error occurred.';
+
         return 0;
       }
     };
@@ -79,6 +94,12 @@ function Home() {
           <LogOutBtn></LogOutBtn>
         </HStack>
       </HStack>
+      {dataError ? (
+        <Alert status='error' className='data-error'>
+          <AlertIcon />
+          {errorMessage}
+        </Alert>
+      ) : null}
       {booksData.length === 0 ? (
         <Box>
           <Center>

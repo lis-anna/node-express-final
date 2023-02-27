@@ -2,13 +2,9 @@ import { useState } from 'react';
 import { login } from '../components/API/Auth';
 import { useNavigate } from 'react-router-dom';
 import { NavLink } from 'react-router-dom';
-import { useCookies } from 'react-cookie';
 import Header from '../components/Header/Header';
 import FrontLogo from '../components/LogoAndTitle/FrontLogo';
-
 import '../pages/pages.css';
-
-//import { useSetRecoilState } from 'recoil';
 import {
   AlertIcon,
   Button,
@@ -24,8 +20,8 @@ import {
 
 const LogInPage = () => {
   const [logInError, setLogInError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
-  //const setAuth = useSetRecoilState(authAtom);
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
 
@@ -36,16 +32,15 @@ const LogInPage = () => {
         email: e.target.email.value,
         password: e.target.password.value,
       });
-      console.log(result, 'result.....');
+      //   console.log(result, 'result.....');
       if (result) {
         setLogInError(false);
-        //const token = JSON.parse(localStorage.getItem('token'));
-        //console.log(token);
-        // setAuth(localStorage.getItem('user'));
         navigate('/home');
       }
     } catch (error) {
       setLogInError(true);
+      // console.log(error.response.data.msg);
+      setErrorMessage(error.response.data.msg);
     }
   };
 
@@ -110,7 +105,7 @@ const LogInPage = () => {
                   {logInError ? (
                     <Alert status='error' className='login-error'>
                       <AlertIcon />
-                      Invalid Password or Username
+                      {errorMessage}
                     </Alert>
                   ) : null}
                 </Box>

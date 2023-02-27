@@ -25,11 +25,12 @@ class BookAPI {
       )
       .then((result) => {
         //    console.log(result.data.book, 'result.data.book');
-        return result.data.book;
+        return result;
       })
-      .catch((error) =>
-        console.log('Whoops, the book adding process went wrong!', error)
-      );
+      .catch((error) => {
+        console.log('Whoops, the book adding process went wrong!', error);
+        return error;
+      });
   }
 
   //Change existing record

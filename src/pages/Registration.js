@@ -1,14 +1,9 @@
-import BookAPI from '../components/API/booksAPI';
 import { register } from '../components/API/Auth';
 import Header from '../components/Header/Header';
 import FrontLogo from '../components/LogoAndTitle/FrontLogo';
-import { ValidationPassword } from '../middleware/ValidationPassword';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate, NavLink } from 'react-router-dom';
-
-/*import { useCookies } from 'react-cookie';
-import { authAtom } from '../state/atom-auth';
-import { useSetRecoilState } from 'recoil';*/
+import '../pages/pages.css';
 import {
   AlertIcon,
   Button,
@@ -22,15 +17,10 @@ import {
   Alert,
 } from '@chakra-ui/react';
 
-import '../pages/pages.css';
-
 function Registration() {
-  // const [error, setError] = useState('');
-  // const [passwordShown, setPasswordShown] = useState(false);
-
+  const [errorMessage, setErrorMessage] = useState('');
   const navigate = useNavigate();
   const [logInError, setLogInError] = useState(false);
-  //const setAuth = useSetRecoilState(authAtom);
   const [show, setShow] = useState(false);
   const handleClick = () => setShow(!show);
 
@@ -49,25 +39,11 @@ function Registration() {
         navigate('/home');
       }
     } catch (error) {
-      console.log(error, 'error');
       setLogInError(true);
+      // console.log(error);
+      setErrorMessage(error.response.data.msg);
     }
   };
-
-  /*const successMessage = () => {
-    return (
-      <div
-        style={{
-          display: submitted ? '' : 'none',
-        }}
-      >
-        <h1>
-          {' '}
-          {userFirstName} {userLastName} is now registered!
-        </h1>
-      </div>
-    );
-  };*/
 
   return (
     <>
@@ -147,7 +123,7 @@ function Registration() {
                   {logInError ? (
                     <Alert status='error' className='login-error'>
                       <AlertIcon />
-                      Invalid registration data
+                      {errorMessage}
                     </Alert>
                   ) : null}
                 </Box>
