@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import BookTable from '../../components/BookTable';
 import AddBookDrawer from '../../components/AddBookDrawer';
 import Header from '../../components/Header/Header';
@@ -16,13 +17,13 @@ import {
 import '../../pages/pages.css';
 function Home() {
   const userToken = JSON.parse(localStorage.getItem('token'));
-  let message = {};
+  const navigate = useNavigate();
   const [booksData, setBooksData] = useState([]);
   const [dataError, setDataError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    const getBooksData = async function (token, message) {
+    const getBooksData = async function (token) {
       try {
         const response = await fetch('/api/v1/books', {
           method: 'GET',
@@ -31,6 +32,13 @@ function Home() {
             Authorization: `Bearer ${token}`,
           },
         });
+        if (response.status === 401) {
+          navigate('/');
+          setDataError(true);
+          setErrorMessage(response.statusText);
+          // console.log('response here only', response);
+          return;
+        }
         let bookDataArray = [];
         const data = await response.json();
         if (response.status === 200) {
@@ -46,18 +54,22 @@ function Home() {
           }
         } else {
           setDataError(true);
-          setErrorMessage(data.msg);
-          return 0;
+          setErrorMessage(response.data.msg);
+          return;
         }
       } catch (err) {
-        setDataError(true);
-        setErrorMessage(err.response.data.msg);
-        message.textContent = 'A communication error occurred.';
+        if (err instanceof Response) {
+          setDataError(true);
+          setErrorMessage(err.json().toString());
+        } else {
+          setDataError(true);
+          setErrorMessage('An error occurred. Please try again later.');
+        }
 
-        return 0;
+        return;
       }
     };
-    getBooksData(userToken, message);
+    getBooksData(userToken);
   }, []);
 
   const handleNewBook = (newBookParams) => {

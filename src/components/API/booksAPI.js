@@ -1,7 +1,7 @@
 import axios from 'axios';
-require('dotenv').config();
-const apiURL = 'http://localhost:5000/api/v1';
 
+const apiURL = process.env.REACT_APP_BASE_URL; //'http://localhost:5000/api/v1';
+//console.log(apiURL, 'apiURL');
 class BookAPI {
   static async addBook(bookParams, bearerKey) {
     //  console.log('book', bookParams);

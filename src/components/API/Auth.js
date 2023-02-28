@@ -1,6 +1,7 @@
 import axios from 'axios';
 
-const apiURL = 'http://localhost:5000/api/v1';
+const apiURL = process.env.REACT_APP_BASE_URL; //'http://localhost:5000/api/v1';
+//console.log(apiURL, 'apiURL');
 
 export const login = async function (formData) {
   return axios

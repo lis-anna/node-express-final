@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Avatar, Button, Box, Stack, Center, Heading } from '@chakra-ui/react';
+import { Avatar, Stack, Heading } from '@chakra-ui/react';
 
 const FrontLogo = () => {
   return (
