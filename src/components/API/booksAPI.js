@@ -1,7 +1,6 @@
 import axios from 'axios';
 
-const apiURL = process.env.REACT_APP_BASE_URL; //'http://localhost:5000/api/v1';
-//console.log(apiURL, 'apiURL');
+const apiURL = process.env.REACT_APP_BASE_URL;
 class BookAPI {
   static async addBook(bookParams, bearerKey) {
     //  console.log('book', bookParams);

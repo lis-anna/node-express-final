@@ -21,11 +21,12 @@ function Home() {
   const [booksData, setBooksData] = useState([]);
   const [dataError, setDataError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const apiURL = process.env.REACT_APP_BASE_URL;
 
   useEffect(() => {
     const getBooksData = async function (token) {
       try {
-        const response = await fetch('/api/v1/books', {
+        const response = await fetch(`${apiURL}/api/v1/books`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
