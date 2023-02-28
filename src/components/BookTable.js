@@ -47,6 +47,7 @@ const BookTable = ({ booksData, handleBookUpdate, handleBookDelete }) => {
   const sort = useSort(
     data,
     {
+      //default sorting
       state: {
         sortKey: 'AUTHOR',
         reverse: false,
@@ -58,7 +59,7 @@ const BookTable = ({ booksData, handleBookUpdate, handleBookDelete }) => {
         AUTHOR: (array) =>
           array.sort((a, b) => a.author.localeCompare(b.author)),
         STATUS: (array) =>
-          array.sort((a, b) => a.status.localeCompare(b.author)),
+          array.sort((a, b) => a.status.localeCompare(b.status)),
         TITLE: (array) => array.sort((a, b) => a.title.localeCompare(b.title)),
       },
     }

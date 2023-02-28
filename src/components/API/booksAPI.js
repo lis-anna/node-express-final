@@ -1,7 +1,7 @@
 import axios from 'axios';
-require('dotenv').config();
-const apiURL = 'http://localhost:5000/api/v1';
 
+const apiURL = process.env.REACT_APP_BASE_URL; //'http://localhost:5000/api/v1';
+//console.log(apiURL, 'apiURL');
 class BookAPI {
   static async addBook(bookParams, bearerKey) {
     //  console.log('book', bookParams);
@@ -25,11 +25,12 @@ class BookAPI {
       )
       .then((result) => {
         //    console.log(result.data.book, 'result.data.book');
-        return result.data.book;
+        return result;
       })
-      .catch((error) =>
-        console.log('Whoops, the book adding process went wrong!', error)
-      );
+      .catch((error) => {
+        //  console.log('Whoops, the book adding process went wrong!', error);
+        return error;
+      });
   }
 
   //Change existing record
@@ -55,11 +56,12 @@ class BookAPI {
       )
       .then((result) => {
         //  console.log(result.data);
-        return result.data.book;
+        return result;
       })
-      .catch((error) =>
-        console.log('Whoops, the book editing process went wrong!', error)
-      );
+      .catch((error) => {
+        //     console.log('Whoops, the book editing process went wrong!', error);
+        return error;
+      });
   }
 
   //Delete record
