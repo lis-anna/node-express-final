@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const apiURL = process.env.REACT_APP_BASE_URL;
+const apiURL = process.env.REACT_APP_BASE_URL_API;
 
 export const login = async function (formData) {
   return axios
